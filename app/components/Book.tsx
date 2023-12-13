@@ -18,6 +18,20 @@ const Book = ({ book }: BookProps) => {
   const user = session?.user;
   const router = useRouter();
 
+  const startCheckout = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({title: book.title, price: book.price})
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handlePurchaseClick = () => {
     setShowModal(true);
   }
@@ -27,6 +41,8 @@ const Book = ({ book }: BookProps) => {
       setShowModal(false);
       router.push('/login');
     } else {
+      //stripeの処理
+      
       alert('購入しました。');
       setShowModal(false);
     }
